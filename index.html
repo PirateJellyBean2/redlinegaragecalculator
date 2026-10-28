@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111113">
+<title>Redline Garage | Order Calculator</title>
+<style>
+:root{--bg:#0b0b0d;--panel:#141417;--panel2:#1b1b20;--line:#303036;--red:#f02b3a;--red2:#a80f20;--text:#f4f4f6;--muted:#9b9ba5;--green:#8ee6ad}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#4a1018 0,transparent 36%),linear-gradient(145deg,#09090b,#111114 55%,#170b0e);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(135deg,transparent 47%,#fff 48%,transparent 49%);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+.wrap{max-width:1180px;margin:auto;padding:28px 20px 56px;position:relative}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 0 28px;border-bottom:1px solid #ffffff16;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:54px;height:54px;background:linear-gradient(145deg,var(--red),#8f0717);display:grid;place-items:center;clip-path:polygon(15% 0,100% 0,85% 100%,0 100%);font-weight:1000;font-style:italic;font-size:25px;box-shadow:0 0 28px #f02b3a35}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;color:var(--red);text-transform:uppercase}.brand h1{font-size:clamp(22px,4vw,32px);letter-spacing:-1px;margin:2px 0 0;font-weight:900;text-transform:uppercase}.brand h1 span{color:var(--red)}
+.status{border:1px solid #38383e;background:#121215;padding:10px 14px;border-radius:9px;color:#c7c7cd;font-size:11px;font-weight:800;letter-spacing:1.3px;white-space:nowrap}.status i{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;margin-right:8px;box-shadow:0 0 10px #8ee6ad}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:22px}.hero h2{margin:0;font-size:clamp(25px,4vw,38px);letter-spacing:-1.5px}.hero p{color:var(--muted);margin:8px 0 0;font-size:14px}.order-tag{color:#fff;background:#f02b3a16;border:1px solid #f02b3a55;border-radius:6px;padding:9px 12px;font-size:11px;letter-spacing:1.5px;font-weight:900;white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.8fr);gap:20px;align-items:start}.panel{background:linear-gradient(150deg,#17171b,#111114);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 16px 50px #0003}.panel-head{padding:19px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.panel-head h3{margin:0;text-transform:uppercase;font-size:13px;letter-spacing:1.5px}.panel-head small{color:var(--muted);font-size:11px}.table-head,.item{display:grid;grid-template-columns:minmax(0,1fr) 105px 92px 120px;gap:12px;align-items:center}.table-head{padding:12px 22px;background:#ffffff04;color:#85858e;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.1px}.item{padding:13px 22px;border-top:1px solid #ffffff09;transition:background .2s}.item:hover{background:#ffffff04}.service{font-weight:750;font-size:13px}.sub{font-size:10px;color:#777780;margin-top:4px}.price,.total{font-variant-numeric:tabular-nums;font-size:13px}.price{color:#bcbcc5}.total{text-align:right;font-weight:800}.qty{width:100%;min-width:0;background:#0b0b0e;color:white;border:1px solid #414149;border-radius:7px;padding:9px 7px;text-align:center;font:700 13px inherit;outline:none;transition:.2s}.qty:focus{border-color:var(--red);box-shadow:0 0 0 3px #f02b3a20}.qty::-webkit-inner-spin-button{opacity:1}.item-foot{display:flex;justify-content:space-between;align-items:center;padding:15px 22px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.item-foot strong{color:#fff}
+.side{display:grid;gap:18px}.total-panel{padding:22px}.total-panel .label{color:#a3a3ad;text-transform:uppercase;letter-spacing:1.7px;font-size:10px;font-weight:900}.big-total{font-size:clamp(32px,4vw,43px);font-weight:950;letter-spacing:-1.8px;margin:8px 0 4px;overflow-wrap:anywhere}.big-total span{color:var(--red)}.saved{color:var(--green);font-size:12px;font-weight:700;min-height:18px}.summary-line{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff12;color:#a7a7b0;font-size:12px}.summary-line strong{color:#f5f5f6;font-variant-numeric:tabular-nums}.summary-line:last-of-type{border:0}.discounts{padding:18px}.discounts h3{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;margin:0 0 5px}.discounts p{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 13px}.discount-option{display:flex;align-items:center;gap:10px;padding:12px 10px;border:1px solid #303036;border-radius:8px;margin-top:8px;background:#ffffff02;cursor:pointer;transition:.2s}.discount-option:has(input:checked){border-color:#f02b3a88;background:#f02b3a0d}.discount-option input{accent-color:var(--red);width:16px;height:16px;cursor:pointer}.discount-text{flex:1;font-size:11px;font-weight:700;line-height:1.4}.discount-rate{font-size:11px;color:#ff737d;font-weight:900;white-space:nowrap}.discount-option small{display:block;color:#85858e;font-weight:500;margin-top:2px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.btn{border:1px solid #44444c;background:#202025;color:white;border-radius:8px;padding:12px 10px;font-weight:850;font-size:11px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;transition:transform .15s,background .15s}.btn:hover{transform:translateY(-1px);background:#2b2b32}.btn.primary{background:var(--red);border-color:var(--red);color:white}.btn.primary:hover{background:#ff3a48}.note{font-size:10px;line-height:1.6;color:#777780;margin-top:13px}.footer{margin-top:25px;text-align:center;color:#64646d;font-size:10px;letter-spacing:1.7px;text-transform:uppercase}.footer b{color:#a6a6ae}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.total-panel{align-self:start}}
+@media(max-width:620px){.wrap{padding:18px 12px 35px}header{padding-bottom:20px}.status{display:none}.hero{align-items:start;flex-direction:column}.table-head,.item{grid-template-columns:minmax(0,1fr) 76px 68px 82px;gap:7px;padding-left:12px;padding-right:12px}.table-head{font-size:8px;letter-spacing:.4px}.item{padding-top:12px;padding-bottom:12px}.service{font-size:11px}.sub{font-size:9px}.price,.total{font-size:11px}.qty{padding:8px 2px;font-size:12px}.panel-head{padding:16px 12px}.item-foot{padding:14px 12px}.side{grid-template-columns:1fr}.total-panel{padding:19px}.discounts{padding:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">R</div><div><div class="eyebrow">Automotive Performance</div><h1>Redline <span>Garage</span></h1></div></div>
+  <div class="status"><i></i> ORDER SYSTEM ONLINE</div>
+</header>
+<section class="hero">
+  <div><h2>Mechanic Order Calculator</h2><p>Build the invoice. Adjust quantities and apply the eligible discount.</p></div>
+  <div class="order-tag">SERVICE INVOICE / 001</div>
+</section>
+<div class="layout">
+  <section class="panel">
+    <div class="panel-head"><h3>Service & Parts</h3><small>Prices in G$</small></div>
+    <div class="table-head"><div>Service type</div><div>Unit price</div><div>Quantity</div><div style="text-align:right">Total</div></div>
+    <div id="items"></div>
+    <div class="item-foot"><span><strong id="lineCount">0</strong> service lines selected</span><span>Subtotal <strong id="subtotalFoot">G$0</strong></span></div>
+  </section>
+  <aside class="side">
+    <section class="panel total-panel">
+      <div class="label">Total due</div>
+      <div class="big-total"><span>G$</span><b id="grandTotal">0</b></div>
+      <div class="saved" id="savedText">Select services to begin</div>
+      <div style="height:15px"></div>
+      <div class="summary-line"><span>Subtotal</span><strong id="subtotal">G$0</strong></div>
+      <div class="summary-line"><span>Discount</span><strong id="discountAmount">− G$0</strong></div>
+      <div class="summary-line"><span>Discount applied</span><strong id="discountRate">0%</strong></div>
+      <div class="actions"><button class="btn primary" id="copyBtn">Copy invoice</button><button class="btn" id="resetBtn">Reset order</button></div>
+      <div class="note">This calculator runs locally in your browser. Your order details are not sent to a server.</div>
+    </section>
+    <section class="panel discounts">
+      <h3>Discount eligibility</h3>
+      <p>Select one discount that applies to this customer. Discounts do not stack.</p>
+      <div id="discountOptions"></div>
+    </section>
+  </aside>
+</div>
+<div class="footer"><b>REDLINE GARAGE</b> &nbsp;•&nbsp; Built for the road ahead</div>
+</div>
+<script>
+const services = [
+  ["Cosmetic Upgrade",500,13],["Performance Upgrade",7000,5],["Basic Repair",1000,0],["Internals Repair",2000,0],
+  ["Ceramic Brakes",4500,1],["Drivetrains",4500,1],["Tyres",4500,1],["Manual Gearbox",4000,0],
+  ["Engine Replacement I4",7000,0],["Engine Replacement V6",8000,0],["Engine Replacement V8",9000,0],
+  ["Engine Replacement V12",10000,0],["Twin Engines",10000,0],["Cleaning Kit",100,0],["Duct Tape",200,0]
+];
+const discounts = [
+  {id:"ems",label:"EMS / DOJ / PD",detail:"Emergency services & government",rate:20},
+  {id:"general",label:"General Discount",detail:"Standard customer discount",rate:10},
+  {id:"employee",label:"Employee Discount",detail:"Redline Garage employees",rate:30},
+  {id:"dh",label:"D&H Discount",detail:"Partner discount",rate:20},
+  {id:"dusty",label:"The Dusty Boot",detail:"Partner discount",rate:20},
+  {id:"pdm",label:"PDM Discount",detail:"Partner discount",rate:30}
+];
+const fmt = n => Math.round(n).toLocaleString("en-US");
+const itemsEl=document.getElementById("items");
+services.forEach((s,i)=>{
+  const row=document.createElement("div");row.className="item";
+  row.innerHTML=`<div><div class="service">${s[0]}</div></div><div class="price">G$${fmt(s[1])}</div><div><input class="qty" type="number" min="0" step="1" inputmode="numeric" value="${s[2]}" aria-label="${s[0]} quantity" data-index="${i}"></div><div class="total" id="line-${i}">G$${fmt(s[1]*s[2])}</div>`;
+  itemsEl.appendChild(row);
+});
+const discountEl=document.getElementById("discountOptions");
+discounts.forEach(d=>{
+  const label=document.createElement("label");label.className="discount-option";
+  label.innerHTML=`<input type="radio" name="discount" value="${d.id}" ${d.id==="pdm"?"checked":""}><span class="discount-text">${d.label}<small>${d.detail}</small></span><span class="discount-rate">${d.rate}% OFF</span>`;
+  discountEl.appendChild(label);
+});
+function getQty(i){const input=document.querySelector(`.qty[data-index="${i}"]`);return Math.max(0,Math.floor(Number(input.value)||0))}
+function selectedDiscount(){const id=document.querySelector('input[name="discount"]:checked')?.value;return discounts.find(d=>d.id===id)||null}
+function calculate(){
+ let subtotal=0,lines=0;
+ services.forEach((s,i)=>{const q=getQty(i),line=s[1]*q;subtotal+=line;if(q>0)lines++;document.getElementById(`line-${i}`).textContent=`G$${fmt(line)}`});
+ const d=selectedDiscount(),discount=Math.round(subtotal*(d?d.rate:0)/100),total=subtotal-discount;
+ document.getElementById("subtotal").textContent=`G$${fmt(subtotal)}`;
+ document.getElementById("subtotalFoot").textContent=`G$${fmt(subtotal)}`;
+ document.getElementById("discountAmount").textContent=`− G$${fmt(discount)}`;
+ document.getElementById("discountRate").textContent=d?`${d.rate}% (${d.label})`:"0%";
+ document.getElementById("grandTotal").textContent=fmt(total);
+ document.getElementById("lineCount").textContent=lines;
+ document.getElementById("savedText").textContent=subtotal===0?"Select services to begin":discount?`You save G$${fmt(discount)} with ${d.label}`:"No discount applied";
+}
+document.addEventListener("input",e=>{if(e.target.classList.contains("qty")){if(e.target.value!==""&&Number(e.target.value)<0)e.target.value=0;calculate()}});
+document.querySelectorAll('input[name="discount"]').forEach(el=>el.addEventListener("change",calculate));
+document.getElementById("resetBtn").addEventListener("click",()=>{services.forEach((s,i)=>document.querySelector(`.qty[data-index="${i}"]`).value=0);document.querySelector('input[name="discount"][value="pdm"]').checked=true;calculate()});
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+ const d=selectedDiscount();let subtotal=0,rows=[];
+ services.forEach((s,i)=>{const q=getQty(i);if(q){const total=s[1]*q;subtotal+=total;rows.push(`${s[0]} x${q} — G$${fmt(total)}`)}});
+ const off=Math.round(subtotal*(d?d.rate:0)/100),total=subtotal-off;
+ const invoice=`REDLINE GARAGE — MECHANIC INVOICE\n${rows.length?rows.join("\n"):"No services selected"}\n\nSubtotal: G$${fmt(subtotal)}\nDiscount: ${d?d.label+" ("+d.rate+"%)":"None"} — G$${fmt(off)}\nTOTAL DUE: G$${fmt(total)}`;
+ const btn=document.getElementById("copyBtn");
+ try{await navigator.clipboard.writeText(invoice);btn.textContent="Copied!";setTimeout(()=>btn.textContent="Copy invoice",1500)}
+ catch(e){window.prompt("Copy your invoice:",invoice)}
+});
+calculate();
+</script>
+</body>
+</html>
